@@ -34,6 +34,9 @@ char senderMacAddress[] = "";
 #define PIN_BELLY_5 27
 #define PIN_BELLY_6 26
 
+#define NUM_STRIPS_WING 6
+#define NUM_STRIPS_BELLY 6
+
 #define NUM_LEDS_WING_1 25
 #define NUM_LEDS_WING_2 25
 #define NUM_LEDS_WING_3 25
@@ -41,8 +44,20 @@ char senderMacAddress[] = "";
 #define NUM_LEDS_WING_5 25
 #define NUM_LEDS_WING_6 25
 
+#define NUM_LEDS_BELLY_1 25
+#define NUM_LEDS_BELLY_2 25
+#define NUM_LEDS_BELLY_3 25
+#define NUM_LEDS_BELLY_4 25
+#define NUM_LEDS_BELLY_5 25
+#define NUM_LEDS_BELLY_6 25
+
 #define NUM_LEDS_EYES 9
 #define NUM_LEDS_SPINE 50
+
+int NUM_LEDS_WING[] = {NUM_LEDS_WING_1, NUM_LEDS_WING_2, NUM_LEDS_WING_3,
+                       NUM_LEDS_WING_4, NUM_LEDS_WING_5, NUM_LEDS_WING_6};
+int NUM_LEDS_BELLY[] = {NUM_LEDS_BELLY_1, NUM_LEDS_BELLY_2, NUM_LEDS_BELLY_3,
+                        NUM_LEDS_BELLY_4, NUM_LEDS_BELLY_5, NUM_LEDS_BELLY_6};
 
 CRGB ledsLeft1[NUM_LEDS_WING_1];
 CRGB ledsLeft2[NUM_LEDS_WING_2];
@@ -61,6 +76,15 @@ CRGB ledsRight5[NUM_LEDS_WING_5];
 CRGB ledsRight6[NUM_LEDS_WING_6];
 CRGB *ledsRight[] = {ledsRight1, ledsRight2, ledsRight3,
                      ledsRight4, ledsRight5, ledsRight6};
+
+CRGB ledsBelly1[NUM_LEDS_BELLY_1];
+CRGB ledsBelly2[NUM_LEDS_BELLY_2];
+CRGB ledsBelly3[NUM_LEDS_BELLY_3];
+CRGB ledsBelly4[NUM_LEDS_BELLY_4];
+CRGB ledsBelly5[NUM_LEDS_BELLY_5];
+CRGB ledsBelly6[NUM_LEDS_BELLY_6];
+CRGB *ledsBelly[] = {ledsBelly1, ledsBelly2, ledsBelly3,
+                     ledsBelly4, ledsBelly5, ledsBelly6};
 
 CRGB ledsEyes[NUM_LEDS_EYES];
 CRGB ledsSpine[NUM_LEDS_SPINE];
@@ -123,7 +147,25 @@ void setup() {
         .setDither(BRIGHTNESS < 255);
 
   } else if (boardNumber == 2) {
-    // TODO
+    // Belly
+    FastLED.addLeds<WS2813, PIN_BELLY_1, GRB>(ledsBelly[0], NUM_LEDS_BELLY_1)
+        .setCorrection(TypicalLEDStrip)
+        .setDither(BRIGHTNESS < 255);
+    FastLED.addLeds<WS2813, PIN_BELLY_2, GRB>(ledsBelly[1], NUM_LEDS_BELLY_2)
+        .setCorrection(TypicalLEDStrip)
+        .setDither(BRIGHTNESS < 255);
+    FastLED.addLeds<WS2813, PIN_BELLY_3, GRB>(ledsBelly[2], NUM_LEDS_BELLY_3)
+        .setCorrection(TypicalLEDStrip)
+        .setDither(BRIGHTNESS < 255);
+    FastLED.addLeds<WS2813, PIN_BELLY_4, GRB>(ledsBelly[3], NUM_LEDS_BELLY_4)
+        .setCorrection(TypicalLEDStrip)
+        .setDither(BRIGHTNESS < 255);
+    FastLED.addLeds<WS2813, PIN_BELLY_5, GRB>(ledsBelly[4], NUM_LEDS_BELLY_5)
+        .setCorrection(TypicalLEDStrip)
+        .setDither(BRIGHTNESS < 255);
+    FastLED.addLeds<WS2813, PIN_BELLY_6, GRB>(ledsBelly[5], NUM_LEDS_BELLY_6)
+        .setCorrection(TypicalLEDStrip)
+        .setDither(BRIGHTNESS < 255);
   }
 }
 
@@ -137,13 +179,13 @@ void loop() {
                    CRGB::Green, CRGB::Blue,   CRGB::Purple};
 
   // Wings
-  for (int i = 0; i < 6; i++) {
-    for (int j = 0; j < NUM_LEDS_WING_1; j++) {
-      ledsLeft[i][j] = colors[i];
+  for (int i = 0; i < NUM_STRIPS_WING; i++) {
+    for (int j = 0; j < NUM_LEDS_WING[i]; j++) {
+      ledsLeft[i][j] = colors[NUM_STRIPS_WING - 1 - i];
     }
   }
-  for (int i = 0; i < 6; i++) {
-    for (int j = 0; j < NUM_LEDS_WING_1; j++) {
+  for (int i = 0; i < NUM_STRIPS_WING; i++) {
+    for (int j = 0; j < NUM_LEDS_WING[i]; j++) {
       ledsRight[i][j] = colors[i];
     }
   }
@@ -156,6 +198,13 @@ void loop() {
   // Spine
   for (int i = 0; i < NUM_LEDS_SPINE; i++) {
     ledsSpine[i] = CRGB::Pink;
+  }
+
+  // Belly
+  for (int i = 0; i < NUM_STRIPS_BELLY; i++) {
+    for (int j = 0; j < NUM_LEDS_BELLY[i]; j++) {
+      ledsBelly[i][j] = colors[NUM_STRIPS_BELLY - 1 - i];
+    }
   }
 
   FastLED.show();
