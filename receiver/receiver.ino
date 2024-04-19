@@ -1,4 +1,5 @@
 #include <FastLED.h>
+#include <WiFi.h>
 
 uint8_t receiverAddress1[] = {0xA8, 0x42, 0xE3, 0xAB, 0x80, 0xD4};
 uint8_t receiverAddress2[] = {0xA0, 0xA3, 0xB3, 0x2D, 0x4E, 0x58};
@@ -7,8 +8,6 @@ char receiverMacAddress1[] = "A8:42:E3:AB:80:D4";
 char receiverMacAddress2[] = "A0:A3:B3:2D:4E:58";
 char senderMacAddress[] = "";
 
-#define LED_PIN  19
-#define NUM_LEDS 25
 #define BRIGHTNESS 255
 
 // RECEIVER BOARD 1
@@ -35,56 +34,145 @@ char senderMacAddress[] = "";
 #define PIN_BELLY_5 27
 #define PIN_BELLY_6 26
 
-CRGB leds[NUM_LEDS];
+#define NUM_LEDS_WING_1 25
+#define NUM_LEDS_WING_2 25
+#define NUM_LEDS_WING_3 25
+#define NUM_LEDS_WING_4 25
+#define NUM_LEDS_WING_5 25
+#define NUM_LEDS_WING_6 25
+
+#define NUM_LEDS_EYES 9
+#define NUM_LEDS_SPINE 50
+
+CRGB ledsLeft1[NUM_LEDS_WING_1];
+CRGB ledsLeft2[NUM_LEDS_WING_2];
+CRGB ledsLeft3[NUM_LEDS_WING_3];
+CRGB ledsLeft4[NUM_LEDS_WING_4];
+CRGB ledsLeft5[NUM_LEDS_WING_5];
+CRGB ledsLeft6[NUM_LEDS_WING_6];
+CRGB *ledsLeft[] = {ledsLeft1, ledsLeft2, ledsLeft3,
+                    ledsLeft4, ledsLeft5, ledsLeft6};
+
+CRGB ledsRight1[NUM_LEDS_WING_1];
+CRGB ledsRight2[NUM_LEDS_WING_2];
+CRGB ledsRight3[NUM_LEDS_WING_3];
+CRGB ledsRight4[NUM_LEDS_WING_4];
+CRGB ledsRight5[NUM_LEDS_WING_5];
+CRGB ledsRight6[NUM_LEDS_WING_6];
+CRGB *ledsRight[] = {ledsRight1, ledsRight2, ledsRight3,
+                     ledsRight4, ledsRight5, ledsRight6};
+
+CRGB ledsEyes[NUM_LEDS_EYES];
+CRGB ledsSpine[NUM_LEDS_SPINE];
+
+byte boardNumber;
 
 void setup() {
-  FastLED.addLeds<WS2813, LED_PIN, GRB>(leds, NUM_LEDS)
-    .setCorrection(TypicalLEDStrip)
-    .setDither(BRIGHTNESS < 255);
+  Serial.begin(9600);
+  delay(500);
+
+  boardNumber = getBoardNumber();
+
+  if (boardNumber == 1) {
+    // Left wing
+    FastLED.addLeds<WS2813, PIN_LEFT_1, GRB>(ledsLeft[0], NUM_LEDS_WING_1)
+        .setCorrection(TypicalLEDStrip)
+        .setDither(BRIGHTNESS < 255);
+    FastLED.addLeds<WS2813, PIN_LEFT_2, GRB>(ledsLeft[1], NUM_LEDS_WING_2)
+        .setCorrection(TypicalLEDStrip)
+        .setDither(BRIGHTNESS < 255);
+    FastLED.addLeds<WS2813, PIN_LEFT_3, GRB>(ledsLeft[2], NUM_LEDS_WING_3)
+        .setCorrection(TypicalLEDStrip)
+        .setDither(BRIGHTNESS < 255);
+    FastLED.addLeds<WS2813, PIN_LEFT_4, GRB>(ledsLeft[3], NUM_LEDS_WING_4)
+        .setCorrection(TypicalLEDStrip)
+        .setDither(BRIGHTNESS < 255);
+    FastLED.addLeds<WS2813, PIN_LEFT_5, GRB>(ledsLeft[4], NUM_LEDS_WING_5)
+        .setCorrection(TypicalLEDStrip)
+        .setDither(BRIGHTNESS < 255);
+    FastLED.addLeds<WS2813, PIN_LEFT_6, GRB>(ledsLeft[5], NUM_LEDS_WING_6)
+        .setCorrection(TypicalLEDStrip)
+        .setDither(BRIGHTNESS < 255);
+
+    // Right wing
+    FastLED.addLeds<WS2813, PIN_RIGHT_1, GRB>(ledsRight[0], NUM_LEDS_WING_1)
+        .setCorrection(TypicalLEDStrip)
+        .setDither(BRIGHTNESS < 255);
+    FastLED.addLeds<WS2813, PIN_RIGHT_2, GRB>(ledsRight[1], NUM_LEDS_WING_2)
+        .setCorrection(TypicalLEDStrip)
+        .setDither(BRIGHTNESS < 255);
+    FastLED.addLeds<WS2813, PIN_RIGHT_3, GRB>(ledsRight[2], NUM_LEDS_WING_3)
+        .setCorrection(TypicalLEDStrip)
+        .setDither(BRIGHTNESS < 255);
+    FastLED.addLeds<WS2813, PIN_RIGHT_4, GRB>(ledsRight[3], NUM_LEDS_WING_4)
+        .setCorrection(TypicalLEDStrip)
+        .setDither(BRIGHTNESS < 255);
+    FastLED.addLeds<WS2813, PIN_RIGHT_5, GRB>(ledsRight[4], NUM_LEDS_WING_5)
+        .setCorrection(TypicalLEDStrip)
+        .setDither(BRIGHTNESS < 255);
+    FastLED.addLeds<WS2813, PIN_RIGHT_6, GRB>(ledsRight[5], NUM_LEDS_WING_6)
+        .setCorrection(TypicalLEDStrip)
+        .setDither(BRIGHTNESS < 255);
+
+    // Eyes and Spine
+    FastLED.addLeds<WS2813, PIN_EYES, GRB>(ledsEyes, NUM_LEDS_EYES)
+        .setCorrection(TypicalLEDStrip)
+        .setDither(BRIGHTNESS < 255);
+    FastLED.addLeds<WS2813, PIN_SPINE, GRB>(ledsSpine, NUM_LEDS_SPINE)
+        .setCorrection(TypicalLEDStrip)
+        .setDither(BRIGHTNESS < 255);
+
+  } else if (boardNumber == 2) {
+    // TODO
+  }
 }
 
 void loop() {
-  pride();
+  EVERY_N_SECONDS(1) {
+    Serial.print("boardNumber: ");
+    Serial.println(boardNumber);
+  }
+
+  CRGB colors[] = {CRGB::Red,   CRGB::Orange, CRGB::Yellow,
+                   CRGB::Green, CRGB::Blue,   CRGB::Purple};
+
+  // Wings
+  for (int i = 0; i < 6; i++) {
+    for (int j = 0; j < NUM_LEDS_WING_1; j++) {
+      ledsLeft[i][j] = colors[i];
+    }
+  }
+  for (int i = 0; i < 6; i++) {
+    for (int j = 0; j < NUM_LEDS_WING_1; j++) {
+      ledsRight[i][j] = colors[i];
+    }
+  }
+
+  // Eyes
+  for (int i = 0; i < NUM_LEDS_EYES; i++) {
+    ledsEyes[i] = CRGB::White;
+  }
+
+  // Spine
+  for (int i = 0; i < NUM_LEDS_SPINE; i++) {
+    ledsSpine[i] = CRGB::Pink;
+  }
+
   FastLED.show();
 }
 
-// This function is taken from the FastLED example Pride2015
-void pride() {
-  static uint16_t sPseudotime = 0;
-  static uint16_t sLastMillis = 0;
-  static uint16_t sHue16 = 0;
-
-  uint8_t sat8 = beatsin88(87, 220, 250);
-  uint8_t brightdepth = beatsin88(341, 96, 224);
-  uint16_t brightnessthetainc16 = beatsin88(203, (25 * 256), (40 * 256));
-  uint8_t msmultiplier = beatsin88(147, 23, 60);
-
-  uint16_t hue16 = sHue16;
-  uint16_t hueinc16 = beatsin88(113, 1, 3000);
-
-  uint16_t ms = millis();
-  uint16_t deltams = ms - sLastMillis;
-  sLastMillis  = ms;
-  sPseudotime += deltams * msmultiplier;
-  sHue16 += deltams * beatsin88(400, 5, 9);
-  uint16_t brightnesstheta16 = sPseudotime;
-
-  for(uint16_t i = 0 ; i < NUM_LEDS; i++) {
-    hue16 += hueinc16;
-    uint8_t hue8 = hue16 / 256;
-
-    brightnesstheta16  += brightnessthetainc16;
-    uint16_t b16 = sin16(brightnesstheta16) + 32768;
-
-    uint16_t bri16 = (uint32_t)((uint32_t)b16 * (uint32_t)b16) / 65536;
-    uint8_t bri8 = (uint32_t)(((uint32_t)bri16) * brightdepth) / 65536;
-    bri8 += (255 - brightdepth);
-
-    CRGB newcolor = CHSV(hue8, sat8, bri8);
-
-    uint16_t pixelnumber = i;
-    pixelnumber = (NUM_LEDS - 1) - pixelnumber;
-
-    nblend(leds[pixelnumber], newcolor, 64);
+// Reads the MAC address of this ESP32 and assigns a number 1 or 2
+byte getBoardNumber() {
+  byte boardNumber = WiFi.macAddress() == receiverMacAddress1   ? 1
+                     : WiFi.macAddress() == receiverMacAddress2 ? 2
+                                                                : 0;
+  if (boardNumber == 0) {
+    Serial.print("MAC address not found: ");
+    Serial.println(WiFi.macAddress());
+  } else {
+    Serial.print("Board number: ");
+    Serial.println(boardNumber);
   }
+
+  return boardNumber;
 }
