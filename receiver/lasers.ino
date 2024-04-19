@@ -1,12 +1,51 @@
-#define LASER_LENGTH 20
+#define LASER_LENGTH 10 // TODO 20
 
-//auto laserScaleSpeed = scale(1, 10, 0.5, 3.0, true);
-//auto laserFadeIn = scale(0, LASER_LENGTH / 2, 0, 255, true);
-//auto laserFadeOut = scale(0, LASER_LENGTH / 2, 255, 0, true);
+Scale laserScaleSpeed = {1, 10, 0.1, 0.6, true}; // TODO 0.5, 3.0
+Scale laserFadeIn = {0, LASER_LENGTH / 2, 0, 255, true};
+Scale laserFadeOut = {0, LASER_LENGTH / 2, 255, 0, true};
 
-Scale laserScaleSpeed = {1, 10, 1.0, 3.0, true};
+int getOffsetPixel(int pixel) {
+  return pixel < MAX_LEDS_WING ? pixel : pixel - MAX_LEDS_WING;
+}
+
+void advanceLaserPixel() {
+  laserPixel += laserScaleSpeed.scale(speed);
+  if (laserPixel > MAX_LEDS_WING) {
+    laserPixel -= MAX_LEDS_WING;
+  }
+}
 
 void lasers() {
-  Serial.print("laserScaleSpeed(5) ");
-  Serial.println(laserScaleSpeed.scale(5));
+  int startPixel = (int)laserPixel;
+  int middlePixel = startPixel + (LASER_LENGTH / 2);
+  int endPixel = startPixel + LASER_LENGTH;
+
+  for (int strand = 0; strand < NUM_STRIPS_WING; strand++) {
+    for (int pixel = 0; pixel < startPixel; pixel++) {
+      int p = getOffsetPixel(pixel);
+      ledsLeft[strand][p] = CRGB::Black;
+      ledsRight[strand][p] = CRGB::Black;
+    }
+    for (int pixel = startPixel; pixel < middlePixel; pixel++) {
+      int b = laserFadeIn.scale(pixel - startPixel);
+      int p = getOffsetPixel(pixel);
+      CRGB color = rainbow[strand];
+      ledsLeft[strand][p] = color.nscale8(b);
+      ledsRight[strand][p] = color.nscale8(b);
+    }
+    for (int pixel = middlePixel; pixel < endPixel; pixel++) {
+      int b = laserFadeOut.scale(pixel - middlePixel);
+      int p = getOffsetPixel(pixel);
+      CRGB color = rainbow[strand];
+      ledsLeft[strand][p] = color.nscale8(b);
+      ledsRight[strand][p] = color.nscale8(b);
+    }
+    for (int pixel = endPixel; pixel < MAX_LEDS_WING; pixel++) {
+      int p = getOffsetPixel(pixel);
+      ledsLeft[strand][p] = CRGB::Black;
+      ledsRight[strand][p] = CRGB::Black;
+    }
+  }
+
+  advanceLaserPixel();
 }

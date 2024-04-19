@@ -1,7 +1,7 @@
-#include <WiFi.h>
-#include <FastLED.h>
-#include <esp_now.h>
 #include "fluxor-dragon-shared.h"
+#include <FastLED.h>
+#include <WiFi.h>
+#include <esp_now.h>
 
 #include "Scale.h"
 
@@ -89,6 +89,11 @@ CRGB ledsEyes[NUM_LEDS_EYES];
 CRGB ledsSpine[NUM_LEDS_SPINE];
 
 byte boardNumber;
+float laserPixel = 0;
+uint8_t speed = DEFAULT_SPEED;
+
+CRGB rainbow[] = {CRGB::Red,   CRGB::Orange, CRGB::Yellow,
+                  CRGB::Green, CRGB::Blue,   CRGB::Purple};
 
 void setup() {
   Serial.begin(9600);
@@ -172,21 +177,23 @@ void loop() {
   EVERY_N_SECONDS(1) {
     Serial.print("boardNumber: ");
     Serial.println(boardNumber);
-    lasers();
   }
 
-  CRGB colors[] = {CRGB::Red,   CRGB::Orange, CRGB::Yellow,
-                   CRGB::Green, CRGB::Blue,   CRGB::Purple};
+  lasers();
 
+  FastLED.show();
+}
+
+void testLEDs() {
   // Wings
   for (int i = 0; i < NUM_STRIPS_WING; i++) {
     for (int j = 0; j < NUM_LEDS_WING[i]; j++) {
-      ledsLeft[i][j] = colors[NUM_STRIPS_WING - 1 - i];
+      ledsLeft[i][j] = rainbow[NUM_STRIPS_WING - 1 - i];
     }
   }
   for (int i = 0; i < NUM_STRIPS_WING; i++) {
     for (int j = 0; j < NUM_LEDS_WING[i]; j++) {
-      ledsRight[i][j] = colors[i];
+      ledsRight[i][j] = rainbow[i];
     }
   }
 
@@ -203,11 +210,9 @@ void loop() {
   // Belly
   for (int i = 0; i < NUM_STRIPS_BELLY; i++) {
     for (int j = 0; j < NUM_LEDS_BELLY[i]; j++) {
-      ledsBelly[i][j] = colors[NUM_STRIPS_BELLY - 1 - i];
+      ledsBelly[i][j] = rainbow[NUM_STRIPS_BELLY - 1 - i];
     }
   }
-
-  FastLED.show();
 }
 
 // Reads the MAC address of this ESP32 and assigns a number 1 or 2
