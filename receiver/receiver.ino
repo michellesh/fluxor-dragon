@@ -1,12 +1,9 @@
-#include <FastLED.h>
 #include <WiFi.h>
+#include <FastLED.h>
+#include <esp_now.h>
+#include "fluxor-dragon-shared.h"
 
-uint8_t receiverAddress1[] = {0xA8, 0x42, 0xE3, 0xAB, 0x80, 0xD4};
-uint8_t receiverAddress2[] = {0xA0, 0xA3, 0xB3, 0x2D, 0x4E, 0x58};
-uint8_t senderAddress[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-char receiverMacAddress1[] = "A8:42:E3:AB:80:D4";
-char receiverMacAddress2[] = "A0:A3:B3:2D:4E:58";
-char senderMacAddress[] = "";
+#include "Scale.h"
 
 #define BRIGHTNESS 255
 
@@ -43,6 +40,7 @@ char senderMacAddress[] = "";
 #define NUM_LEDS_WING_4 25
 #define NUM_LEDS_WING_5 25
 #define NUM_LEDS_WING_6 25
+#define MAX_LEDS_WING NUM_LEDS_WING_1
 
 #define NUM_LEDS_BELLY_1 25
 #define NUM_LEDS_BELLY_2 25
@@ -50,6 +48,7 @@ char senderMacAddress[] = "";
 #define NUM_LEDS_BELLY_4 25
 #define NUM_LEDS_BELLY_5 25
 #define NUM_LEDS_BELLY_6 25
+#define MAX_LEDS_BELLY NUM_LEDS_BELLY_1
 
 #define NUM_LEDS_EYES 9
 #define NUM_LEDS_SPINE 50
@@ -173,6 +172,7 @@ void loop() {
   EVERY_N_SECONDS(1) {
     Serial.print("boardNumber: ");
     Serial.println(boardNumber);
+    lasers();
   }
 
   CRGB colors[] = {CRGB::Red,   CRGB::Orange, CRGB::Yellow,
