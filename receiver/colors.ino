@@ -32,6 +32,7 @@ CRGB getStrandModeColor(int strand, int pixel) {
     return CRGB(0, 0, 0);
   }
 }
+*/
 
 CRGB knobValueToColor(int knobValue) {
   float ywCutoff = 3;  // Percent Yellow/White Cutoff Threshold
@@ -44,4 +45,3 @@ CRGB knobValueToColor(int knobValue) {
     return CHSV(hue, 255, 255);
   }
 }
-*/

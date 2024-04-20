@@ -97,9 +97,14 @@ void setup() {
 }
 
 void loop() {
+  static bool testStrobe = true;
   EVERY_N_SECONDS(1) {
-    background.value++;
-    send(background);
+    if (testStrobe) {
+      send(strobeOn);
+    } else {
+      send(strobeOff);
+    }
+    testStrobe = !testStrobe;
   }
 
   int buttonReadFlash = digitalRead(BUTTON_FLASH);

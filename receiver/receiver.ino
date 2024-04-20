@@ -3,6 +3,8 @@
 #include <WiFi.h>
 #include <esp_now.h>
 
+#include "utils.h"
+
 #include "fluxor-dragon-shared.h"
 
 #include "xy.h"
@@ -113,11 +115,14 @@ CRGB ledsSpine[NUM_LEDS_SPINE];
 
 byte boardNumber;
 float laserPixel = 0;
+float spineLaserPixel = NUM_LEDS_SPINE;
 float spinAngle = 0;
 bool spinReverse = false;
 uint8_t speed = 2;//DEFAULT_SPEED;
 CRGB colorLeft = DEFAULT_COLOR_LEFT;
 CRGB colorRight = DEFAULT_COLOR_RIGHT;
+uint8_t activeViz = DEFAULT_VIZ;
+bool strobeOn = false;
 
 int xMax = 0;
 int xMin = 999;
@@ -127,16 +132,70 @@ CRGB rainbow[] = {CRGB::Red,   CRGB::Orange, CRGB::Yellow,
 
 msg data;
 
+void printActionInfo(msg data, uint8_t len) {
+  switch (data.action) {
+    case ACTION_SET_COLOR_LEFT:
+      Serial.print("ACTION_SET_COLOR_LEFT: ");
+      Serial.println(data.value);
+      break;
+    case ACTION_SET_COLOR_RIGHT:
+      Serial.print("ACTION_SET_COLOR_RIGHT: ");
+      Serial.println(data.value);
+      break;
+    case ACTION_SPEED:
+      Serial.print("ACTION_SPEED: ");
+      Serial.println(data.value);
+      break;
+    case ACTION_SET_BACKGROUND:
+      Serial.print("ACTION_SET_BACKGROUND: ");
+      Serial.println(data.value);
+      break;
+    case ACTION_STROBE_ON:
+      Serial.println("ACTION_STROBE_ON");
+      break;
+    case ACTION_STROBE_OFF:
+      Serial.println("ACTION_STROBE_OFF");
+      break;
+    default:
+      Serial.print("Bytes received: ");
+      Serial.println(len);
+      Serial.print("action: ");
+      Serial.println(data.action);
+      Serial.print("value: ");
+      Serial.println(data.value);
+      Serial.println();
+      break;
+  }
+}
+
 //callback function that will be executed when data is received
 void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
   memcpy(&data, incomingData, sizeof(data));
-  Serial.print("Bytes received: ");
-  Serial.println(len);
-  Serial.print("action: ");
-  Serial.println(data.action);
-  Serial.print("value: ");
-  Serial.println(data.value);
-  Serial.println();
+
+  printActionInfo(data, len);
+
+  // KNOB ACTIONS
+  if (data.action == ACTION_SET_COLOR_LEFT) {
+    CRGB color = knobValueToColor(data.value);
+    colorLeft = color;
+  } else if (data.action == ACTION_SET_COLOR_RIGHT) {
+    CRGB color = knobValueToColor(data.value);
+    colorRight = color;
+  } else if (data.action == ACTION_SPEED) {
+    speed = data.value;
+
+  // BUTTON ACTIONS
+  } else if (data.action == ACTION_SET_BACKGROUND) {
+    activeViz = data.value;
+    if (activeViz == VIZ_WINDSHIELD) {
+      spinAngle = 0;
+    }
+  } else if (data.action == ACTION_STROBE_ON) {
+    strobeOn = true;
+    spineLaserPixel = 0;
+  } else if (data.action == ACTION_STROBE_OFF) {
+    strobeOn = false;
+  }
 }
 
 void setup() {
@@ -253,6 +312,25 @@ void loop() {
   //lasers();
   twinkle();
   //windshield();
+
+  // Eyes
+  for (int i = 0; i < NUM_LEDS_EYES; i++) {
+    ledsEyes[i] = colorLeft;
+    if (!strobeOn) {
+      ledsEyes[i].nscale8(BRIGHTNESS / 3);
+    }
+
+  }
+
+  // Spine
+  spinePride();
+  //spineLaser();
+  if (strobeOn) {
+    for (int i = 0; i < NUM_LEDS_SPINE; i++) {
+      float percent = (float)i / (float)NUM_LEDS_SPINE;
+      ledsSpine[i] = getColorBetween(colorLeft, colorRight, percent);
+    }
+  }
 
   FastLED.show();
 }
