@@ -3,6 +3,8 @@
 #include <FastLED.h>
 #include <esp_now.h>
 
+#include "Scale.h"
+
 #include "fluxor-dragon-shared.h"
 // clang-format on
 
