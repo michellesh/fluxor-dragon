@@ -36,4 +36,4 @@ uint16_t *xRight[] = {xRight1, xRight2, xRight3, xRight4, xRight5, xRight6};
 uint16_t *yRight[] = {yRight1, yRight2, yRight3, yRight4, yRight5, yRight6};
 
 int centerX = 174;
-int centerY = 175;
+int centerY = 210; // 210 is bottom of belly. 175 is y center point between inner wing joints

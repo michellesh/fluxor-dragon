@@ -310,8 +310,9 @@ void loop() {
   }
 
   //lasers();
-  twinkle();
+  //twinkle();
   //windshield();
+  flappingWings();
 
   // Eyes
   for (int i = 0; i < NUM_LEDS_EYES; i++) {
