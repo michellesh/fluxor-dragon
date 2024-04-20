@@ -1,9 +1,14 @@
-#include "fluxor-dragon-shared.h"
+// clang-format off
 #include <FastLED.h>
 #include <WiFi.h>
 #include <esp_now.h>
 
+#include "fluxor-dragon-shared.h"
+
+#include "xy.h"
+
 #include "Scale.h"
+// clang-format on
 
 #define BRIGHTNESS 255
 
@@ -67,6 +72,15 @@ CRGB ledsLeft6[NUM_LEDS_WING_6];
 CRGB *ledsLeft[] = {ledsLeft1, ledsLeft2, ledsLeft3,
                     ledsLeft4, ledsLeft5, ledsLeft6};
 
+int pixelAnglesLeft1[NUM_LEDS_WING_1];
+int pixelAnglesLeft2[NUM_LEDS_WING_2];
+int pixelAnglesLeft3[NUM_LEDS_WING_3];
+int pixelAnglesLeft4[NUM_LEDS_WING_4];
+int pixelAnglesLeft5[NUM_LEDS_WING_5];
+int pixelAnglesLeft6[NUM_LEDS_WING_6];
+int *pixelAnglesLeft[] = {pixelAnglesLeft1, pixelAnglesLeft2, pixelAnglesLeft3,
+                          pixelAnglesLeft4, pixelAnglesLeft5, pixelAnglesLeft6};
+
 CRGB ledsRight1[NUM_LEDS_WING_1];
 CRGB ledsRight2[NUM_LEDS_WING_2];
 CRGB ledsRight3[NUM_LEDS_WING_3];
@@ -75,6 +89,15 @@ CRGB ledsRight5[NUM_LEDS_WING_5];
 CRGB ledsRight6[NUM_LEDS_WING_6];
 CRGB *ledsRight[] = {ledsRight1, ledsRight2, ledsRight3,
                      ledsRight4, ledsRight5, ledsRight6};
+
+int pixelAnglesRight1[NUM_LEDS_WING_1];
+int pixelAnglesRight2[NUM_LEDS_WING_2];
+int pixelAnglesRight3[NUM_LEDS_WING_3];
+int pixelAnglesRight4[NUM_LEDS_WING_4];
+int pixelAnglesRight5[NUM_LEDS_WING_5];
+int pixelAnglesRight6[NUM_LEDS_WING_6];
+int *pixelAnglesRight[] = {pixelAnglesRight1, pixelAnglesRight2, pixelAnglesRight3,
+                           pixelAnglesRight4, pixelAnglesRight5, pixelAnglesRight6};
 
 CRGB ledsBelly1[NUM_LEDS_BELLY_1];
 CRGB ledsBelly2[NUM_LEDS_BELLY_2];
@@ -90,7 +113,9 @@ CRGB ledsSpine[NUM_LEDS_SPINE];
 
 byte boardNumber;
 float laserPixel = 0;
-uint8_t speed = DEFAULT_SPEED;
+float spinAngle = 0;
+bool spinReverse = false;
+uint8_t speed = 1;//DEFAULT_SPEED;
 
 CRGB rainbow[] = {CRGB::Red,   CRGB::Orange, CRGB::Yellow,
                   CRGB::Green, CRGB::Blue,   CRGB::Purple};
@@ -171,15 +196,19 @@ void setup() {
         .setCorrection(TypicalLEDStrip)
         .setDither(BRIGHTNESS < 255);
   }
+
+  initPixelAngles();
 }
 
 void loop() {
   EVERY_N_SECONDS(1) {
-    Serial.print("boardNumber: ");
-    Serial.println(boardNumber);
+    //Serial.print("boardNumber: ");
+    //Serial.println(boardNumber);
   }
 
-  lasers();
+  //lasers();
+  //twinkle();
+  windshield();
 
   FastLED.show();
 }
@@ -197,6 +226,13 @@ void testLEDs() {
     }
   }
 
+  // Belly
+  for (int i = 0; i < NUM_STRIPS_BELLY; i++) {
+    for (int j = 0; j < NUM_LEDS_BELLY[i]; j++) {
+      ledsBelly[i][j] = rainbow[NUM_STRIPS_BELLY - 1 - i];
+    }
+  }
+
   // Eyes
   for (int i = 0; i < NUM_LEDS_EYES; i++) {
     ledsEyes[i] = CRGB::White;
@@ -205,13 +241,6 @@ void testLEDs() {
   // Spine
   for (int i = 0; i < NUM_LEDS_SPINE; i++) {
     ledsSpine[i] = CRGB::Pink;
-  }
-
-  // Belly
-  for (int i = 0; i < NUM_STRIPS_BELLY; i++) {
-    for (int j = 0; j < NUM_LEDS_BELLY[i]; j++) {
-      ledsBelly[i][j] = rainbow[NUM_STRIPS_BELLY - 1 - i];
-    }
   }
 }
 

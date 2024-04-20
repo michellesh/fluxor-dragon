@@ -23,27 +23,35 @@ void lasers() {
   for (int strand = 0; strand < NUM_STRIPS_WING; strand++) {
     for (int pixel = 0; pixel < startPixel; pixel++) {
       int p = getOffsetPixel(pixel);
-      ledsLeft[strand][p] = CRGB::Black;
-      ledsRight[strand][p] = CRGB::Black;
+      if (p < NUM_LEDS_WING[strand]) {
+        ledsLeft[strand][p] = CRGB::Black;
+        ledsRight[strand][p] = CRGB::Black;
+      }
     }
     for (int pixel = startPixel; pixel < middlePixel; pixel++) {
       int b = laserFadeIn.scale(pixel - startPixel);
       int p = getOffsetPixel(pixel);
-      CRGB color = rainbow[strand];
-      ledsLeft[strand][p] = color.nscale8(b);
-      ledsRight[strand][p] = color.nscale8(b);
+      if (p < NUM_LEDS_WING[strand]) {
+        CRGB color = rainbow[strand];
+        ledsLeft[strand][p] = color.nscale8(b);
+        ledsRight[strand][p] = color.nscale8(b);
+      }
     }
     for (int pixel = middlePixel; pixel < endPixel; pixel++) {
       int b = laserFadeOut.scale(pixel - middlePixel);
       int p = getOffsetPixel(pixel);
-      CRGB color = rainbow[strand];
-      ledsLeft[strand][p] = color.nscale8(b);
-      ledsRight[strand][p] = color.nscale8(b);
+      if (p < NUM_LEDS_WING[strand]) {
+        CRGB color = rainbow[strand];
+        ledsLeft[strand][p] = color.nscale8(b);
+        ledsRight[strand][p] = color.nscale8(b);
+      }
     }
     for (int pixel = endPixel; pixel < MAX_LEDS_WING; pixel++) {
       int p = getOffsetPixel(pixel);
-      ledsLeft[strand][p] = CRGB::Black;
-      ledsRight[strand][p] = CRGB::Black;
+      if (p < NUM_LEDS_WING[strand]) {
+        ledsLeft[strand][p] = CRGB::Black;
+        ledsRight[strand][p] = CRGB::Black;
+      }
     }
   }
 

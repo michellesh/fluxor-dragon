@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="utf-8"/>
+  <script src="d3.v4.min.js"></script>
+  <script type="application/javascript" src="prototype.js"></script>
+  <style>
+    #container {
+      width: 350;
+      margin: auto;
+      background-image: url('./dragon-diagram.jpg');
+      background-repeat: no-repeat;
+      /*background-size: 500px 392px;*/
+      background-size: 350px 274px;
+    }
+    #canvas {
+      border: 1px solid #000;
+    }
+  </style>
+ </head>
+ <body onload="draw();">
+   <div id="container">
+     <canvas id="canvas" width="350" height="350"></canvas>
+     <div id="output"></div>
+   </div>
+ </body>
+</html>
