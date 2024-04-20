@@ -20,8 +20,9 @@ void twinkle() {
 
   for (uint8_t strand = 0; strand < NUM_STRIPS_WING; strand++) {
     for (uint8_t pixel = 0; pixel < NUM_LEDS_WING[strand]; pixel++) {
-      CRGB color = rainbow[strand];
+      CRGB color = getGradientColorLeft(strand, pixel);
       ledsLeft[strand][pixel] = getTwinkleColor(PRNG16, clock32, color);
+      color = getGradientColorRight(strand, pixel);
       ledsRight[strand][pixel] = getTwinkleColor(PRNG16, clock32, color);
     }
   }

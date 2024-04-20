@@ -222,5 +222,6 @@ const draw = () => {
 
     // draw a dot for pixel 15 line 2
     Dot(leftWingXY[2][15]).draw(ctx);
+    Dot(rightWingXY[1][20]).draw(ctx);
   }
 };

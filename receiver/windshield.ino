@@ -37,13 +37,13 @@ uint8_t angleDiffToBrightness(int diff) {
 void setStrandInThreshold(int strand, int pixel) {
   int diffLeft = abs(spinAngle - pixelAnglesLeft[strand][pixel]);
   if (diffLeft < ANGLE_THRESHOLD) {
-    CRGB color = rainbow[strand];
+    CRGB color = getGradientColorLeft(strand, pixel);
     ledsLeft[strand][pixel] = color.nscale8(angleDiffToBrightness(diffLeft));
   }
 
   int diffRight = abs(spinAngle - pixelAnglesRight[strand][pixel]);
   if (diffRight < ANGLE_THRESHOLD) {
-    CRGB color = rainbow[strand];
+    CRGB color = getGradientColorRight(strand, pixel);
     ledsRight[strand][pixel] = color.nscale8(angleDiffToBrightness(diffRight));
   }
 }
@@ -80,6 +80,4 @@ void windshield() {
       spinReverse = true;
     }
   }
-
-  EVERY_N_MILLISECONDS(100) { Serial.println(spinAngle); }
 }

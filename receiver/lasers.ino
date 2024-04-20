@@ -32,8 +32,9 @@ void lasers() {
       int b = laserFadeIn.scale(pixel - startPixel);
       int p = getOffsetPixel(pixel);
       if (p < NUM_LEDS_WING[strand]) {
-        CRGB color = rainbow[strand];
+        CRGB color = getGradientColorLeft(strand, pixel);
         ledsLeft[strand][p] = color.nscale8(b);
+        color = getGradientColorRight(strand, pixel);
         ledsRight[strand][p] = color.nscale8(b);
       }
     }
@@ -41,8 +42,9 @@ void lasers() {
       int b = laserFadeOut.scale(pixel - middlePixel);
       int p = getOffsetPixel(pixel);
       if (p < NUM_LEDS_WING[strand]) {
-        CRGB color = rainbow[strand];
+        CRGB color = getGradientColorLeft(strand, pixel);
         ledsLeft[strand][p] = color.nscale8(b);
+        color = getGradientColorRight(strand, pixel);
         ledsRight[strand][p] = color.nscale8(b);
       }
     }

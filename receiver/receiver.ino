@@ -115,7 +115,12 @@ byte boardNumber;
 float laserPixel = 0;
 float spinAngle = 0;
 bool spinReverse = false;
-uint8_t speed = 1;//DEFAULT_SPEED;
+uint8_t speed = 2;//DEFAULT_SPEED;
+CRGB colorLeft = DEFAULT_COLOR_LEFT;
+CRGB colorRight = DEFAULT_COLOR_RIGHT;
+
+int xMax = 0;
+int xMin = 999;
 
 CRGB rainbow[] = {CRGB::Red,   CRGB::Orange, CRGB::Yellow,
                   CRGB::Green, CRGB::Blue,   CRGB::Purple};
@@ -197,6 +202,18 @@ void setup() {
         .setDither(BRIGHTNESS < 255);
   }
 
+  // Set min and max X values
+  for (int i = 0; i < NUM_STRIPS_WING; i++) {
+    for (int j = 0; j < NUM_LEDS_WING[i]; j++) {
+      if (xRight[i][j] > xMax) {
+        xMax = xRight[i][j];
+      }
+      if (xLeft[i][j] < xMin) {
+        xMin = xLeft[i][j];
+      }
+    }
+  }
+
   initPixelAngles();
 }
 
@@ -204,11 +221,15 @@ void loop() {
   EVERY_N_SECONDS(1) {
     //Serial.print("boardNumber: ");
     //Serial.println(boardNumber);
+    Serial.print("xMax: ");
+    Serial.println(xMax);
+    Serial.print("xMin: ");
+    Serial.println(xMin);
   }
 
   //lasers();
-  //twinkle();
-  windshield();
+  twinkle();
+  //windshield();
 
   FastLED.show();
 }
