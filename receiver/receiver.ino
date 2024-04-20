@@ -125,9 +125,36 @@ int xMin = 999;
 CRGB rainbow[] = {CRGB::Red,   CRGB::Orange, CRGB::Yellow,
                   CRGB::Green, CRGB::Blue,   CRGB::Purple};
 
+msg data;
+
+//callback function that will be executed when data is received
+void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
+  memcpy(&data, incomingData, sizeof(data));
+  Serial.print("Bytes received: ");
+  Serial.println(len);
+  Serial.print("action: ");
+  Serial.println(data.action);
+  Serial.print("value: ");
+  Serial.println(data.value);
+  Serial.println();
+}
+
 void setup() {
   Serial.begin(9600);
   delay(500);
+
+  //Set device as a Wi-Fi Station
+  WiFi.mode(WIFI_STA);
+
+  //Init ESP-NOW
+  if (esp_now_init() != ESP_OK) {
+    Serial.println("Error initializing ESP-NOW");
+    return;
+  }
+
+  // Once ESPNow is successfully Init, we will register for recv CB to
+  // get recv packer info
+  esp_now_register_recv_cb(OnDataRecv);
 
   boardNumber = getBoardNumber();
 
@@ -221,10 +248,6 @@ void loop() {
   EVERY_N_SECONDS(1) {
     //Serial.print("boardNumber: ");
     //Serial.println(boardNumber);
-    Serial.print("xMax: ");
-    Serial.println(xMax);
-    Serial.print("xMin: ");
-    Serial.println(xMin);
   }
 
   //lasers();
