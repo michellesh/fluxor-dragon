@@ -45,3 +45,34 @@ CRGB knobValueToColor(int knobValue) {
     return CHSV(hue, 255, 255);
   }
 }
+
+void setAllColor(CRGB color) {
+  // Wings
+  for (int i = 0; i < NUM_STRIPS_WING; i++) {
+    for (int j = 0; j < NUM_LEDS_WING[i]; j++) {
+      ledsLeft[i][j] = color;
+    }
+  }
+  for (int i = 0; i < NUM_STRIPS_WING; i++) {
+    for (int j = 0; j < NUM_LEDS_WING[i]; j++) {
+      ledsRight[i][j] = color;
+    }
+  }
+
+  // Belly
+  for (int i = 0; i < NUM_STRIPS_BELLY; i++) {
+    for (int j = 0; j < NUM_LEDS_BELLY[i]; j++) {
+      ledsBelly[i][j] = color;
+    }
+  }
+
+  // Eyes
+  for (int i = 0; i < NUM_LEDS_EYES; i++) {
+    ledsEyes[i] = color;
+  }
+
+  // Spine
+  for (int i = 0; i < NUM_LEDS_SPINE; i++) {
+    ledsSpine[i] = color;
+  }
+}

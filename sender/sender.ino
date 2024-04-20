@@ -97,6 +97,8 @@ void setup() {
 }
 
 void loop() {
+  /*
+  // TEST STROBE
   static bool testStrobe = true;
   EVERY_N_SECONDS(1) {
     if (testStrobe) {
@@ -105,6 +107,20 @@ void loop() {
       send(strobeOff);
     }
     testStrobe = !testStrobe;
+  }
+  */
+
+  // TEST CYCLE BACKGROUND
+  static int testCycleBackground = 1;
+  EVERY_N_SECONDS(1) {
+    background.value = testCycleBackground;
+    Serial.print("testCycleBackground: ");
+    Serial.println(testCycleBackground);
+    send(background);
+    testCycleBackground++;
+    if (testCycleBackground > 3) {
+      testCycleBackground = 1;
+    }
   }
 
   int buttonReadFlash = digitalRead(BUTTON_FLASH);

@@ -1,6 +1,6 @@
 #define LASER_LENGTH 10 // TODO 20
 
-Scale laserScaleSpeed = {1, 10, 0.1, 0.6, true}; // TODO 0.5, 3.0
+Scale laserScaleSpeed = {1, 10, 0.5, 2.0, true}; // TODO 0.5, 3.0
 Scale laserFadeIn = {0, LASER_LENGTH / 2, 0, 255, true};
 Scale laserFadeOut = {0, LASER_LENGTH / 2, 255, 0, true};
 

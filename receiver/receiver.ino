@@ -118,7 +118,7 @@ float laserPixel = 0;
 float spineLaserPixel = NUM_LEDS_SPINE;
 float spinAngle = 0;
 bool spinReverse = false;
-uint8_t speed = 2;//DEFAULT_SPEED;
+uint8_t speed = DEFAULT_SPEED;
 CRGB colorLeft = DEFAULT_COLOR_LEFT;
 CRGB colorRight = DEFAULT_COLOR_RIGHT;
 uint8_t activeViz = DEFAULT_VIZ;
@@ -309,10 +309,18 @@ void loop() {
     //Serial.println(boardNumber);
   }
 
-  //lasers();
-  //twinkle();
-  //windshield();
-  flappingWings();
+  EVERY_N_MILLISECONDS(20) {
+    if (activeViz == VIZ_TWINKLE) {
+      twinkle();
+    } else if (activeViz == VIZ_LASERS) {
+      lasers();
+    } else if (activeViz == VIZ_WINDSHIELD) {
+      //windshield();
+      flappingWings();
+    } else {
+      setAllColor(CRGB(0, 0, 0));
+    }
+  }
 
   // Eyes
   for (int i = 0; i < NUM_LEDS_EYES; i++) {
