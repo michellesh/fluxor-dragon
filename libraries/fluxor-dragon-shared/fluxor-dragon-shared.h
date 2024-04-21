@@ -11,6 +11,7 @@
 #define DEFAULT_VIZ 0
 
 // Knob Actions
+#define ACTION_SET_COLOR_EYE 0
 #define ACTION_SET_COLOR_LEFT 1
 #define ACTION_SET_COLOR_RIGHT 2
 #define ACTION_SPEED 3

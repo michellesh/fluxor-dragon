@@ -34,6 +34,7 @@ struct Knob {
 };
 
 // Knob Actions
+msg colorEye = {ACTION_SET_COLOR_EYE};
 msg colorLeft = {ACTION_SET_COLOR_LEFT};
 msg colorRight = {ACTION_SET_COLOR_RIGHT};
 msg speed = {ACTION_SPEED};
@@ -129,44 +130,13 @@ void loop() {
     }
   }
 
-  int buttonReadFlash = digitalRead(BUTTON_FLASH);
-  int buttonReadLasers = digitalRead(BUTTON_LASERS);
-  int buttonReadTwinkle = digitalRead(BUTTON_TWINKLE);
-  int buttonReadWindshield = digitalRead(BUTTON_WINDSHIELD);
+  checkKnobChanged(knobColorEye);
+  checkKnobChanged(knobColorLeft);
+  checkKnobChanged(knobColorRight);
+  checkKnobChanged(knobSpeed);
 
-  int knobReadColorEye = analogRead(KNOB_COLOR_EYE);
-  int knobReadColorLeft = analogRead(KNOB_COLOR_LEFT);
-  int knobReadColorRight = analogRead(KNOB_COLOR_RIGHT);
-  int knobReadSpeed = analogRead(KNOB_SPEED);
-
-  EVERY_N_MILLISECONDS(1000) {
-    Serial.print("buttonReadFlash: ");
-    Serial.println(buttonReadFlash);
-    Serial.print("buttonReadLasers: ");
-    Serial.println(buttonReadLasers);
-    Serial.print("buttonReadTwinkle: ");
-    Serial.println(buttonReadTwinkle);
-    Serial.print("buttonReadWindshield: ");
-    Serial.println(buttonReadWindshield);
-    Serial.println("---");
-    Serial.print("knobReadColorEye: ");
-    Serial.println(knobReadColorEye);
-    Serial.print("knobReadColorLeft: ");
-    Serial.println(knobReadColorLeft);
-    Serial.print("knobReadColorRight: ");
-    Serial.println(knobReadColorRight);
-    Serial.print("knobReadSpeed: ");
-    Serial.println(knobReadSpeed);
-    Serial.println();
-  }
-
-  //checkKnobChanged(knobColorLeft);
-  //checkKnobChanged(knobColorRight);
-  //checkKnobChanged(knobSpeed);
-
-  //checkButtonPressed(buttonLasers);
-  //checkButtonPressed(buttonTwinkle);
-  //checkButtonPressed(buttonWindshield);
-  //checkButtonPressed(buttonFlash);
-
+  checkButtonPressed(buttonLasers);
+  checkButtonPressed(buttonTwinkle);
+  checkButtonPressed(buttonWindshield);
+  checkButtonPressed(buttonFlash);
 }

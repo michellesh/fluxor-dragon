@@ -1,8 +1,10 @@
-Scale knobToHue = {1000, 0, 255, 0, true};
-Scale knobToSpeed = {1000, 0, 1, 11, true};
+#define POTENTIOMETER_MAX 4095
+
+Scale knobToHue = {POTENTIOMETER_MAX, 0, 255, 0, true};
+Scale knobToSpeed = {POTENTIOMETER_MAX, 0, 1, 11, true};
 
 bool knobValueChanged(Knob knob) {
-  int BUFFER = 20;
+  int BUFFER = 100;
   return knob.value < (knob.prev - BUFFER) || knob.value > (knob.prev + BUFFER);
 }
 
@@ -16,6 +18,10 @@ void checkKnobChanged(Knob &knob) {
 
 void onKnobChanged(Knob &knob) {
   switch (knob.pin) {
+    case KNOB_COLOR_EYE:
+      colorEye.value = knobToHue.scale(knobColorEye.value);
+      send(colorEye);
+      break;
     case KNOB_COLOR_LEFT:
       colorLeft.value = knobToHue.scale(knobColorLeft.value);
       send(colorLeft);
@@ -34,7 +40,8 @@ void onKnobChanged(Knob &knob) {
 }
 
 void printKnobText(Knob &knob) {
-  int value = knob.pin == KNOB_COLOR_LEFT ? colorLeft.value
+  int value = knob.pin == KNOB_COLOR_EYE ? colorEye.value
+    : knob.pin == KNOB_COLOR_LEFT ? colorLeft.value
     : knob.pin == KNOB_COLOR_RIGHT ? colorRight.value
     : speed.value;
 
