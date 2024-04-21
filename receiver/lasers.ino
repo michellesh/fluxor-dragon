@@ -38,9 +38,6 @@ void lasers() {
         ledsLeft[strand][p] = CRGB::Black;
         ledsRight[strand][p] = CRGB::Black;
       }
-      //if (p < NUM_LEDS_BELLY[strand]) {
-      //  ledsBelly[strand][p] = CRGB::Black;
-      //}
     }
     for (int pixel = startPixel; pixel < middlePixel; pixel++) {
       int b = laserFadeIn.scale(pixel - startPixel);
@@ -51,10 +48,6 @@ void lasers() {
         color = getGradientColorRight(strand, pixel);
         ledsRight[strand][p] = color.nscale8(b);
       }
-      //if (p < NUM_LEDS_BELLY[strand]) {
-      //  CRGB color = getGradientColorBelly(strand, pixel);
-      //  ledsBelly[strand][p] = color.nscale8(b);
-      //}
     }
     for (int pixel = middlePixel; pixel < endPixel; pixel++) {
       int b = laserFadeOut.scale(pixel - middlePixel);
@@ -65,10 +58,6 @@ void lasers() {
         color = getGradientColorRight(strand, pixel);
         ledsRight[strand][p] = color.nscale8(b);
       }
-      //if (p < NUM_LEDS_BELLY[strand]) {
-      //  CRGB color = getGradientColorBelly(strand, pixel);
-      //  ledsBelly[strand][p] = color.nscale8(b);
-      //}
     }
     for (int pixel = endPixel; pixel < MAX_LEDS_WING; pixel++) {
       int p = getOffsetPixel(pixel);
@@ -76,9 +65,6 @@ void lasers() {
         ledsLeft[strand][p] = CRGB::Black;
         ledsRight[strand][p] = CRGB::Black;
       }
-      //if (p < NUM_LEDS_BELLY[strand]) {
-      //  ledsBelly[strand][p] = CRGB::Black;
-      //}
     }
   }
 

@@ -337,7 +337,7 @@ void loop() {
       showBellyNoAnimation();
     } else if (activeViz == VIZ_WINDSHIELD) {
       //windshield();
-      flappingWings();
+      flap();
       showBellyNoAnimation();
     } else {
       setAllColor(CRGB(0, 0, 0));

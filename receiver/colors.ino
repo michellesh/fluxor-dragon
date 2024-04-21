@@ -6,28 +6,6 @@ CRGB getColorBetween(CRGB color1, CRGB color2, float percent) {
   );
 }
 
-/*
-CRGB getGradientColorLeft(int strand, int pixel) {
-  float xAdjusted = (float)xLeft[strand][pixel] - (float)xMin;
-  float xTotalWidth = (float)xMax - (float)xMin;
-  float percent = xAdjusted / xTotalWidth;
-  return getColorBetween(colorLeft, colorRight, percent);
-}
-
-CRGB getGradientColorRight(int strand, int pixel) {
-  float xAdjusted = (float)xRight[strand][pixel] - (float)xMin;
-  float xTotalWidth = (float)xMax - (float)xMin;
-  float percent = xAdjusted / xTotalWidth;
-  return getColorBetween(colorLeft, colorRight, percent);
-}
-
-CRGB getGradientColorBelly(int strand, int pixel) {
-  float xAdjusted = (float)xBelly[strand][pixel] - (float)xMin;
-  float xTotalWidth = (float)xMax - (float)xMin;
-  float percent = xAdjusted / xTotalWidth;
-  return getColorBetween(colorLeft, colorRight, percent);
-}
-*/
 CRGB getGradientColorLeft(int strand, int pixel) {
   float percent = mapf(pixel, NUM_LEDS_WING[strand], 0, 0, 0.33333);
   return getColorBetween(colorLeft, colorRight, percent);
@@ -42,20 +20,6 @@ CRGB getGradientColorRight(int strand, int pixel) {
   float percent = mapf(pixel, 0, NUM_LEDS_WING[strand], 0.66667, 1);
   return getColorBetween(colorLeft, colorRight, percent);
 }
-
-/*
-CRGB getStrandModeColor(int strand, int pixel) {
-  if (colorMode == COLOR_MODE_WHEEL) {
-    return getStrandWheelColor(strand, pixel);
-  } else if (colorMode == COLOR_MODE_GRADIENT) {
-    return getStrandGradientColor(strand, pixel);
-  } else if (colorMode == COLOR_MODE_SOLID) {
-    return activeColor;
-  } else {
-    return CRGB(0, 0, 0);
-  }
-}
-*/
 
 CRGB knobValueToColor(int knobValue) {
   float ywCutoff = 3;  // Percent Yellow/White Cutoff Threshold
