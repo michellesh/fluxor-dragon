@@ -35,8 +35,8 @@ struct Knob {
 };
 
 int backgrounds[] = {VIZ_TWINKLE, VIZ_LASERS, VIZ_WINDSHIELD};
-//unsigned long backgroundCycleTime = 1000 * 60 * 5;  // 5 minutes
-unsigned long backgroundCycleTime = 1000 * 5 * 1;  // 5 seconds
+unsigned long backgroundCycleTime = 1000 * 60 * 5;  // 5 minutes
+//unsigned long backgroundCycleTime = 1000 * 5 * 1;  // 5 seconds
 
 // Knob Actions
 msg colorEye = {ACTION_SET_COLOR_EYE};
@@ -74,7 +74,7 @@ void setup() {
     return;
   }
 
-  esp_now_register_send_cb(OnDataSent);
+  //esp_now_register_send_cb(OnDataSent);
 
   // register peer
   peerInfo.channel = 0;
