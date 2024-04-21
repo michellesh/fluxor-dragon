@@ -30,6 +30,16 @@ uint16_t yRight4[] = {182, 181, 181, 180, 179, 179, 178, 177, 177, 176, 176, 175
 uint16_t yRight5[] = {196, 196, 195, 195, 194, 194, 193, 193, 192, 192, 191, 191, 190, 190, 189, 189, 188, 188, 187, 187, 186, 186, 185, 185, 184, 184, 183, 183, 182, 182, 181, 181, 180, 180, 179, 179, 178, 178, 177, 177, 176, 176, 175, 175, 174, 174, 173, 173, 172, 172, 171, 171, 170, 170, 169, 169, 168, 168, 167, 167, 166, 166, 165, 165, 164, 164, 163, 163, 162, 162, 161, 161};
 uint16_t yRight6[] = {210, 210, 209, 209, 209, 208, 208, 208, 207, 207, 207, 206, 206, 206, 205, 205, 204, 204, 204, 203, 203, 203, 202, 202, 202, 201, 201, 201, 200, 200, 200, 199, 199, 199, 198, 198, 198, 197, 197, 197, 196, 196, 196, 195, 195, 194, 194, 194, 193, 193, 193, 192, 192, 192, 191, 191, 191, 190, 190, 190, 189, 189, 189, 188, 188, 188, 187, 187, 187, 186, 186, 185};
 
+uint16_t xBelly1[NUM_LEDS_BELLY_1];
+uint16_t xBelly2[NUM_LEDS_BELLY_2];
+uint16_t xBelly3[NUM_LEDS_BELLY_3];
+uint16_t xBelly4[NUM_LEDS_BELLY_4];
+uint16_t xBelly5[NUM_LEDS_BELLY_5];
+uint16_t xBelly6[NUM_LEDS_BELLY_6];
+uint16_t *xBelly[] = {xBelly1, xBelly2, xBelly3, xBelly4, xBelly5, xBelly6};
+uint16_t yBelly[] = {140, 154, 168, 182, 196, 210};
+uint16_t xBellyStart = 228;
+
 uint16_t *xLeft[] = {xLeft1, xLeft2, xLeft3, xLeft4, xLeft5, xLeft6};
 uint16_t *yLeft[] = {yLeft1, yLeft2, yLeft3, yLeft4, yLeft5, yLeft6};
 uint16_t *xRight[] = {xRight1, xRight2, xRight3, xRight4, xRight5, xRight6};

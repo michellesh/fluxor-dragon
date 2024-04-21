@@ -7,8 +7,6 @@
 
 #include "fluxor-dragon-shared.h"
 
-#include "xy.h"
-
 #include "Scale.h"
 // clang-format on
 
@@ -60,6 +58,8 @@
 #define NUM_LEDS_EYES 9
 #define NUM_LEDS_SPINE 50
 
+#include "xy.h"
+
 int NUM_LEDS_WING[] = {NUM_LEDS_WING_1, NUM_LEDS_WING_2, NUM_LEDS_WING_3,
                        NUM_LEDS_WING_4, NUM_LEDS_WING_5, NUM_LEDS_WING_6};
 int NUM_LEDS_BELLY[] = {NUM_LEDS_BELLY_1, NUM_LEDS_BELLY_2, NUM_LEDS_BELLY_3,
@@ -109,6 +109,15 @@ CRGB ledsBelly5[NUM_LEDS_BELLY_5];
 CRGB ledsBelly6[NUM_LEDS_BELLY_6];
 CRGB *ledsBelly[] = {ledsBelly1, ledsBelly2, ledsBelly3,
                      ledsBelly4, ledsBelly5, ledsBelly6};
+
+int pixelAnglesBelly1[NUM_LEDS_BELLY_1];
+int pixelAnglesBelly2[NUM_LEDS_BELLY_2];
+int pixelAnglesBelly3[NUM_LEDS_BELLY_3];
+int pixelAnglesBelly4[NUM_LEDS_BELLY_4];
+int pixelAnglesBelly5[NUM_LEDS_BELLY_5];
+int pixelAnglesBelly6[NUM_LEDS_BELLY_6];
+int *pixelAnglesBelly[] = {pixelAnglesBelly1, pixelAnglesBelly2, pixelAnglesBelly3,
+                           pixelAnglesBelly4, pixelAnglesBelly5, pixelAnglesBelly6};
 
 CRGB ledsEyes[NUM_LEDS_EYES];
 CRGB ledsSpine[NUM_LEDS_SPINE];

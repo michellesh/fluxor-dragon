@@ -20,6 +20,13 @@ CRGB getGradientColorRight(int strand, int pixel) {
   return getColorBetween(colorLeft, colorRight, percent);
 }
 
+CRGB getGradientColorBelly(int strand, int pixel) {
+  float xAdjusted = (float)xBelly[strand][pixel] - (float)xMin;
+  float xTotalWidth = (float)xMax - (float)xMin;
+  float percent = xAdjusted / xTotalWidth;
+  return getColorBetween(colorLeft, colorRight, percent);
+}
+
 /*
 CRGB getStrandModeColor(int strand, int pixel) {
   if (colorMode == COLOR_MODE_WHEEL) {
