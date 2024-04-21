@@ -9,10 +9,10 @@
 // clang-format on
 
 // Knob pins. Works: 34, 35, 32, 33
-#define KNOB_EYE 32 // 0 -> 4095
 #define KNOB_SPEED 33
 #define KNOB_COLOR_LEFT 34
 #define KNOB_COLOR_RIGHT 35
+#define KNOB_COLOR_EYE 32 // 0 -> 4095
 
 // Button pins. Works: 23, 22, 2, 4
 #define BUTTON_FLASH 2
@@ -49,6 +49,7 @@ Button buttonTwinkle = {BUTTON_TWINKLE, "TWINKLE", false};
 Button buttonWindshield = {BUTTON_WINDSHIELD, "WINDSHIELD", false};
 Button buttonFlash = {BUTTON_FLASH, "FLASH", false};
 
+Knob knobColorEye = {KNOB_COLOR_EYE, "COLOR EYE"};
 Knob knobColorLeft = {KNOB_COLOR_LEFT, "COLOR LEFT"};
 Knob knobColorRight = {KNOB_COLOR_RIGHT, "COLOR RIGHT"};
 Knob knobSpeed = {KNOB_SPEED, "SPEED"};
@@ -133,6 +134,7 @@ void loop() {
   int buttonReadTwinkle = digitalRead(BUTTON_TWINKLE);
   int buttonReadWindshield = digitalRead(BUTTON_WINDSHIELD);
 
+  int knobReadColorEye = analogRead(KNOB_COLOR_EYE);
   int knobReadColorLeft = analogRead(KNOB_COLOR_LEFT);
   int knobReadColorRight = analogRead(KNOB_COLOR_RIGHT);
   int knobReadSpeed = analogRead(KNOB_SPEED);
@@ -147,6 +149,8 @@ void loop() {
     Serial.print("buttonReadWindshield: ");
     Serial.println(buttonReadWindshield);
     Serial.println("---");
+    Serial.print("knobReadColorEye: ");
+    Serial.println(knobReadColorEye);
     Serial.print("knobReadColorLeft: ");
     Serial.println(knobReadColorLeft);
     Serial.print("knobReadColorRight: ");
