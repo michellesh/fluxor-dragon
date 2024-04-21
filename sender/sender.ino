@@ -4,6 +4,7 @@
 #include <esp_now.h>
 
 #include "Scale.h"
+#include "Timer.h"
 
 #include "fluxor-dragon-shared.h"
 // clang-format on
@@ -33,6 +34,10 @@ struct Knob {
   int prev;
 };
 
+int backgrounds[] = {VIZ_TWINKLE, VIZ_LASERS, VIZ_WINDSHIELD};
+//unsigned long backgroundCycleTime = 1000 * 60 * 5;  // 5 minutes
+unsigned long backgroundCycleTime = 1000 * 5 * 1;  // 5 seconds
+
 // Knob Actions
 msg colorEye = {ACTION_SET_COLOR_EYE};
 msg colorLeft = {ACTION_SET_COLOR_LEFT};
@@ -55,21 +60,9 @@ Knob knobColorLeft = {KNOB_COLOR_LEFT, "COLOR LEFT"};
 Knob knobColorRight = {KNOB_COLOR_RIGHT, "COLOR RIGHT"};
 Knob knobSpeed = {KNOB_SPEED, "SPEED"};
 
-esp_now_peer_info_t peerInfo;
+Timer backgroundTimer = {backgroundCycleTime, 0};
 
-// callback when data is sent
-void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
-  /*
-  char macStr[18];
-  Serial.print("Packet to: ");
-  // Copies the sender mac address to a string
-  snprintf(macStr, sizeof(macStr), "%02x:%02x:%02x:%02x:%02x:%02x",
-           mac_addr[0], mac_addr[1], mac_addr[2], mac_addr[3], mac_addr[4], mac_addr[5]);
-  Serial.print(macStr);
-  Serial.print(" send status:\t");
-  Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
-  */
-}
+esp_now_peer_info_t peerInfo;
 
 void setup() {
   Serial.begin(9600);
@@ -106,28 +99,13 @@ void setup() {
 }
 
 void loop() {
-  /*
-  // TEST STROBE
-  static bool testStrobe = true;
-  EVERY_N_SECONDS(1) {
-    if (testStrobe) {
-      send(strobeOn);
-    } else {
-      send(strobeOff);
-    }
-    testStrobe = !testStrobe;
-  }
-  */
-
-  // TEST CYCLE BACKGROUND
-  static int testCycleBackground = 1;
-  EVERY_N_SECONDS(1) {
-    background.value = testCycleBackground;
+  // Every N seconds, cycle through the active background viz
+  if (backgroundTimer.complete()) {
+    cycleBackground();
     send(background);
-    testCycleBackground++;
-    if (testCycleBackground > 3) {
-      testCycleBackground = 1;
-    }
+    Serial.print("Background changed: ");
+    Serial.println(background.value);
+    backgroundTimer.reset();
   }
 
   checkKnobChanged(knobColorEye);
@@ -139,4 +117,16 @@ void loop() {
   checkButtonPressed(buttonTwinkle);
   checkButtonPressed(buttonWindshield);
   checkButtonPressed(buttonFlash);
+}
+
+void cycleBackground() {
+  int numBackgrounds = sizeof(backgrounds) / sizeof(backgrounds[0]);
+  int currentIndex = 0;
+  for (int i = 0; i < numBackgrounds; i++) {
+    if (backgrounds[i] == background.value) {
+      currentIndex = i;
+    }
+  }
+  int newIndex = currentIndex < numBackgrounds - 1 ? currentIndex + 1 : 0;
+  background.value = backgrounds[newIndex];
 }
