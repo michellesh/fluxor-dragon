@@ -8,6 +8,7 @@
 #include "fluxor-dragon-shared.h"
 
 #include "Scale.h"
+#include "Timer.h"
 // clang-format on
 
 #define BRIGHTNESS 255
@@ -45,7 +46,8 @@
 #define NUM_LEDS_WING_4 25
 #define NUM_LEDS_WING_5 25
 #define NUM_LEDS_WING_6 25
-#define MAX_LEDS_WING NUM_LEDS_WING_1
+#define MAX_LEDS_WING NUM_LEDS_WING_1 // TODO
+#define MIN_LEDS_WING NUM_LEDS_WING_6 // TODO
 
 #define NUM_LEDS_BELLY_1 25
 #define NUM_LEDS_BELLY_2 25
@@ -53,9 +55,10 @@
 #define NUM_LEDS_BELLY_4 25
 #define NUM_LEDS_BELLY_5 25
 #define NUM_LEDS_BELLY_6 25
-#define MAX_LEDS_BELLY NUM_LEDS_BELLY_1
+#define MAX_LEDS_BELLY NUM_LEDS_BELLY_1 // TODO
+#define MIN_LEDS_BELLY NUM_LEDS_BELLY_6 // TODO
 
-#define NUM_LEDS_EYES 9
+#define NUM_LEDS_EYES 12
 #define NUM_LEDS_SPINE 50
 
 #include "xy.h"
@@ -134,8 +137,10 @@ CRGB colorEye = DEFAULT_COLOR_EYE;
 uint8_t activeViz = DEFAULT_VIZ;
 bool strobeOn = false;
 
-int xMax = 0;
+int xMax = 0; // calculated in setup()
 int xMin = 999;
+
+Timer laserTimer = {500, 0}; // 1000 = 1 second
 
 CRGB rainbow[] = {CRGB::Red,   CRGB::Orange, CRGB::Yellow,
                   CRGB::Green, CRGB::Blue,   CRGB::Purple};
@@ -202,6 +207,8 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
     activeViz = data.value;
     if (activeViz == VIZ_WINDSHIELD) {
       spinAngle = 0;
+    } else if (activeViz == VIZ_LASERS) {
+      laserPixel = 0;
     }
   } else if (data.action == ACTION_STROBE_ON) {
     strobeOn = true;
@@ -327,9 +334,11 @@ void loop() {
       twinkle();
     } else if (activeViz == VIZ_LASERS) {
       lasers();
+      showBellyNoAnimation();
     } else if (activeViz == VIZ_WINDSHIELD) {
       //windshield();
       flappingWings();
+      showBellyNoAnimation();
     } else {
       setAllColor(CRGB(0, 0, 0));
     }
@@ -355,6 +364,15 @@ void loop() {
   }
 
   FastLED.show();
+}
+
+void showBellyNoAnimation() {
+  for (int i = 0; i < NUM_STRIPS_BELLY; i++) {
+    for (int j = 0; j < NUM_LEDS_BELLY[i]; j++) {
+      CRGB color = getGradientColorBelly(i, j);
+      ledsBelly[i][j] = color.nscale8(BRIGHTNESS / 2);
+    }
+  }
 }
 
 void testLEDs() {

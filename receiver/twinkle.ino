@@ -26,6 +26,12 @@ void twinkle() {
       ledsRight[strand][pixel] = getTwinkleColor(PRNG16, clock32, color);
     }
   }
+  for (int strand = 0; strand < NUM_STRIPS_BELLY; strand++) {
+    for (int pixel = 0; pixel < NUM_LEDS_BELLY[strand]; pixel++) {
+      CRGB color = getGradientColorBelly(strand, pixel);
+      ledsBelly[strand][pixel] = getTwinkleColor(PRNG16, clock32, color);
+    }
+  }
 }
 
 CRGB getTwinkleColor(uint16_t &PRNG16, uint32_t clock32, CRGB color) {

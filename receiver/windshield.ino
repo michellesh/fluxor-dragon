@@ -2,6 +2,12 @@
 
 Scale spinSpeed = {1, 10, 0.3, 10, true}; // TODO 1, 20
 
+/*
+int xBellyScaleToLength(int strand, int xBelly) {
+  return map(xBelly, xMinBelly, xMaxBelly, xMinBelly, xMinBelly + NUM_LEDS_BELLY[strand]);
+}
+*/
+
 void initPixelAngles() {
   for (int strand = 0; strand < NUM_STRIPS_WING; strand++) {
     for (int pixel = 0; pixel < NUM_LEDS_WING[strand]; pixel++) {
@@ -21,16 +27,19 @@ void initPixelAngles() {
       pixelAnglesRight[strand][pixel] = getPixelAngle(x, y);
     }
   }
+  /*
   // Belly. Calculate both pixelAnglesBelly and xBelly
   for (int strand = 0; strand < NUM_STRIPS_BELLY; strand++) {
     for (int pixel = 0; pixel < NUM_LEDS_BELLY[strand]; pixel++) {
-      float xPosition = (float)pixel * 1.3333333;
-      xBelly[strand][pixel] = (int)((float)xBellyStart - xPosition);
+      float xDist = (float)pixel * 1.3333333; // LEDs are 1.3333" apart
+      int xPosition = (int)((float)xBellyStart - xDist); // Belly LEDs run backwards
+      xBelly[strand][pixel] = xBellyScaleToLength(strand, xPosition);
       int x = xBelly[strand][pixel];
       int y = yBelly[strand];
       pixelAnglesBelly[strand][pixel] = getPixelAngle(x, y);
     }
   }
+  */
 }
 
 int getPixelAngle(int x, int y) {
@@ -106,6 +115,7 @@ void setWingStrandInThresholdFlap(int strand, int pixel) {
   }
 }
 
+/*
 void setBellyStrandInThresholdFlap(int strand, int pixel) {
   int diff = abs(spinAngle - pixelAnglesBelly[strand][pixel]);
   if (diff < ANGLE_THRESHOLD) {
@@ -113,26 +123,27 @@ void setBellyStrandInThresholdFlap(int strand, int pixel) {
     ledsBelly[strand][pixel] = color.nscale8(angleDiffToBrightness(diff));
   }
 }
+*/
 
 void flappingWings() {
   for (int strand = 0; strand < NUM_STRIPS_WING; strand++) {
     fadeToBlackBy(ledsLeft[strand], NUM_LEDS_WING[strand], 20);
     fadeToBlackBy(ledsRight[strand], NUM_LEDS_WING[strand], 20);
   }
-  for (int strand = 0; strand < NUM_STRIPS_BELLY; strand++) {
-    fadeToBlackBy(ledsBelly[strand], NUM_LEDS_BELLY[strand], 20);
-  }
+  //for (int strand = 0; strand < NUM_STRIPS_BELLY; strand++) {
+  //  fadeToBlackBy(ledsBelly[strand], NUM_LEDS_BELLY[strand], 20);
+  //}
 
   for (int strand = 0; strand < NUM_STRIPS_WING; strand++) {
     for (int pixel = 0; pixel < NUM_LEDS_WING[strand]; pixel++) {
       setWingStrandInThresholdFlap(strand, pixel);
     }
   }
-  for (int strand = 0; strand < NUM_STRIPS_BELLY; strand++) {
-    for (int pixel = 0; pixel < NUM_LEDS_BELLY[strand]; pixel++) {
-      setBellyStrandInThresholdFlap(strand, pixel);
-    }
-  }
+  //for (int strand = 0; strand < NUM_STRIPS_BELLY; strand++) {
+  //  for (int pixel = 0; pixel < NUM_LEDS_BELLY[strand]; pixel++) {
+  //    setBellyStrandInThresholdFlap(strand, pixel);
+  //  }
+  //}
 
   // Update angle
   int angleMax = 135; // the angle at which the windshield wiper bounces on the
