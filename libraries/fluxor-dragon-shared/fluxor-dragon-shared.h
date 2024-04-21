@@ -8,6 +8,7 @@
 #define DEFAULT_SPEED 5
 #define DEFAULT_COLOR_LEFT CRGB(255, 0, 0)    // Red
 #define DEFAULT_COLOR_RIGHT CRGB(128, 0, 128) // Purple
+#define DEFAULT_COLOR_EYE CRGB(255, 0, 0)     // Red
 #define DEFAULT_VIZ 0
 
 // Knob Actions

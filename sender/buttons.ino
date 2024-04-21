@@ -33,7 +33,7 @@ void onButtonPressed(Button &button) {
       //backgroundTimer.reset();
       break;
     case BUTTON_FLASH:
-      send(strobeOn);
+      send(strobeOff); // Big button has opposite values
       break;
     default: break;
   }
@@ -42,7 +42,7 @@ void onButtonPressed(Button &button) {
 void onButtonUnpressed(Button &button) {
   switch (button.pin) {
     case BUTTON_FLASH:
-      send(strobeOff);
+      send(strobeOn); // Big button has opposite values
       break;
     default: break;
   }

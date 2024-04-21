@@ -121,6 +121,7 @@ bool spinReverse = false;
 uint8_t speed = DEFAULT_SPEED;
 CRGB colorLeft = DEFAULT_COLOR_LEFT;
 CRGB colorRight = DEFAULT_COLOR_RIGHT;
+CRGB colorEye = DEFAULT_COLOR_EYE;
 uint8_t activeViz = DEFAULT_VIZ;
 bool strobeOn = false;
 
@@ -181,6 +182,9 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
   } else if (data.action == ACTION_SET_COLOR_RIGHT) {
     CRGB color = knobValueToColor(data.value);
     colorRight = color;
+  } else if (data.action == ACTION_SET_COLOR_EYE) {
+    CRGB color = knobValueToColor(data.value);
+    colorEye = color;
   } else if (data.action == ACTION_SPEED) {
     speed = data.value;
 
@@ -324,7 +328,7 @@ void loop() {
 
   // Eyes
   for (int i = 0; i < NUM_LEDS_EYES; i++) {
-    ledsEyes[i] = colorLeft;
+    ledsEyes[i] = colorEye;
     if (!strobeOn) {
       ledsEyes[i].nscale8(BRIGHTNESS / 3);
     }
