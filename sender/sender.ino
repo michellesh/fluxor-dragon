@@ -8,12 +8,15 @@
 #include "fluxor-dragon-shared.h"
 // clang-format on
 
-#define KNOB_SPEED 13
-#define KNOB_COLOR_LEFT 27
-#define KNOB_COLOR_RIGHT 26
+// Knob pins. Works: 34, 35, 32, 33
+#define KNOB_EYE 32 // 0 -> 4095
+#define KNOB_SPEED 33
+#define KNOB_COLOR_LEFT 34
+#define KNOB_COLOR_RIGHT 35
 
-#define BUTTON_FLASH 19
-#define BUTTON_LASERS 21
+// Button pins. Works: 23, 22, 2, 4
+#define BUTTON_FLASH 2
+#define BUTTON_LASERS 4
 #define BUTTON_TWINKLE 22
 #define BUTTON_WINDSHIELD 23
 
@@ -54,6 +57,7 @@ esp_now_peer_info_t peerInfo;
 
 // callback when data is sent
 void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
+  /*
   char macStr[18];
   Serial.print("Packet to: ");
   // Copies the sender mac address to a string
@@ -62,6 +66,7 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
   Serial.print(macStr);
   Serial.print(" send status:\t");
   Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Delivery Success" : "Delivery Fail");
+  */
 }
 
 void setup() {
@@ -116,8 +121,6 @@ void loop() {
   static int testCycleBackground = 1;
   EVERY_N_SECONDS(1) {
     background.value = testCycleBackground;
-    Serial.print("testCycleBackground: ");
-    Serial.println(testCycleBackground);
     send(background);
     testCycleBackground++;
     if (testCycleBackground > 3) {
@@ -152,4 +155,14 @@ void loop() {
     Serial.println(knobReadSpeed);
     Serial.println();
   }
+
+  //checkKnobChanged(knobColorLeft);
+  //checkKnobChanged(knobColorRight);
+  //checkKnobChanged(knobSpeed);
+
+  //checkButtonPressed(buttonLasers);
+  //checkButtonPressed(buttonTwinkle);
+  //checkButtonPressed(buttonWindshield);
+  //checkButtonPressed(buttonFlash);
+
 }
