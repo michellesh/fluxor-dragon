@@ -64,6 +64,18 @@ Timer backgroundTimer = {backgroundCycleTime, 0};
 
 esp_now_peer_info_t peerInfo;
 
+void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
+  memcpy(&data, incomingData, sizeof(data));
+
+  Serial.println("Sending all values");
+  if (data.action == REQUEST_KNOB_VALUES) {
+    // It only seems to send the first two packets, these seem like the most important
+    send(colorLeft);
+    send(colorRight);
+    send(speed);
+  }
+}
+
 void setup() {
   Serial.begin(9600);
 
@@ -91,6 +103,10 @@ void setup() {
     Serial.println("Failed to add peer");
     return;
   }
+
+  // Once ESPNow is successfully Init, we will register for recv CB to
+  // get recv packer info
+  esp_now_register_recv_cb(OnDataRecv);
 
   pinMode(BUTTON_FLASH, INPUT);
   pinMode(BUTTON_LASERS, INPUT);

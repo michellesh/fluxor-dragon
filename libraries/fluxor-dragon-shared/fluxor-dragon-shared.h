@@ -22,12 +22,14 @@
 #define ACTION_STROBE_OFF 6
 #define ACTION_STROBE_ON 7
 
+#define REQUEST_KNOB_VALUES 8
+
 uint8_t receiverAddress1[] = {0xA8, 0x42, 0xE3, 0xAB, 0x80, 0xD4};
 uint8_t receiverAddress2[] = {0xA0, 0xA3, 0xB3, 0x2D, 0x4E, 0x58};
-uint8_t senderAddress[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+uint8_t senderAddress[] = {0xA0, 0xA3, 0xB3, 0xED, 0x91, 0xDC};
 char receiverMacAddress1[] = "A8:42:E3:AB:80:D4";
 char receiverMacAddress2[] = "A0:A3:B3:2D:4E:58";
-char senderMacAddress[] = "";
+char senderMacAddress[] = "A0:A3:B3:ED:91:DC";
 
 typedef struct msg {
   uint8_t action;

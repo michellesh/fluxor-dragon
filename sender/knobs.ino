@@ -53,3 +53,24 @@ void printKnobText(Knob &knob) {
 void readKnobValue(Knob &knob) {
   knob.value = analogRead(knob.pin);
 }
+
+/*
+void sendKnobValues() {
+  readKnobValue(knobColorEye);
+  readKnobValue(knobColorLeft);
+  readKnobValue(knobColorRight);
+  readKnobValue(knobSpeed);
+  onKnobChanged(knobColorLeft);
+  delay(500);
+  onKnobChanged(knobColorRight);
+  delay(500);
+  onKnobChanged(knobColorEye);
+  delay(500);
+  onKnobChanged(knobSpeed);
+  delay(500);
+  printKnobText(knobColorEye);
+  printKnobText(knobColorLeft);
+  printKnobText(knobColorRight);
+  printKnobText(knobSpeed);
+}
+*/

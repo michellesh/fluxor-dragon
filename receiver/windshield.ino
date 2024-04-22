@@ -3,18 +3,19 @@
 Scale spinSpeed = {1, 10, 0.3, 10, true}; // TODO 1, 20
 
 void initPixelAngles() {
-  for (int strand = 0; strand < NUM_STRIPS_WING; strand++) {
-    for (int pixel = 0; pixel < NUM_LEDS_WING[strand]; pixel++) {
-      int x = xLeft[strand][pixel];
-      int y = yLeft[strand][pixel];
-      pixelAnglesLeft[strand][pixel] = getPixelAngle(x, y);
-    }
-  }
+  //for (int strand = 0; strand < NUM_STRIPS_WING; strand++) {
+  //  for (int pixel = 0; pixel < NUM_LEDS_WING[strand]; pixel++) {
+  //    int x = xLeft[strand][pixel];
+  //    int y = yLeft[strand][pixel];
+  //    pixelAnglesLeft[strand][pixel] = getPixelAngle(x, y);
+  //  }
+  //}
   for (int strand = 0; strand < NUM_STRIPS_WING; strand++) {
     for (int pixel = 0; pixel < NUM_LEDS_WING[strand]; pixel++) {
       int x = xRight[strand][pixel];
       int y = yRight[strand][pixel];
       pixelAnglesRight[strand][pixel] = getPixelAngle(x, y);
+      pixelAnglesLeft[strand][pixel] = 360 - getPixelAngle(x, y);
     }
   }
 }

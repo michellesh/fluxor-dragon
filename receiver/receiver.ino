@@ -218,6 +218,8 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
   }
 }
 
+esp_now_peer_info_t peerInfo;
+
 void setup() {
   Serial.begin(9600);
   delay(500);
@@ -228,6 +230,16 @@ void setup() {
   //Init ESP-NOW
   if (esp_now_init() != ESP_OK) {
     Serial.println("Error initializing ESP-NOW");
+    return;
+  }
+
+  // register peer
+  peerInfo.channel = 0;
+  peerInfo.encrypt = false;
+  // register first peer
+  memcpy(peerInfo.peer_addr, senderAddress, 6);
+  if (esp_now_add_peer(&peerInfo) != ESP_OK){
+    Serial.println("Failed to add peer");
     return;
   }
 
@@ -321,6 +333,9 @@ void setup() {
   }
 
   initPixelAngles();
+
+  msg m = {REQUEST_KNOB_VALUES};
+  send(m);
 }
 
 void loop() {
