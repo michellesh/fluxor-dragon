@@ -6,18 +6,25 @@ CRGB getColorBetween(CRGB color1, CRGB color2, float percent) {
   );
 }
 
+uint8_t getHueBetween(uint8_t hue1, uint8_t hue2, float percent) {
+  return hue1 + percent * (float)(hue2 - hue1);
+}
+
 CRGB getGradientColorLeft(int strand, int pixel) {
   float percent = mapf(pixel, NUM_LEDS_WING[strand], 0, 0, 0.33333);
+  //return CHSV(getHueBetween(hueLeft, hueRight, percent), 255, 255);
   return getColorBetween(colorLeft, colorRight, percent);
 }
 
 CRGB getGradientColorBelly(int strand, int pixel) {
   float percent = mapf(pixel, NUM_LEDS_BELLY[strand], 0, 0.33333, 0.66667);
+  //return CHSV(getHueBetween(hueLeft, hueRight, percent), 255, 255);
   return getColorBetween(colorLeft, colorRight, percent);
 }
 
 CRGB getGradientColorRight(int strand, int pixel) {
   float percent = mapf(pixel, 0, NUM_LEDS_WING[strand], 0.66667, 1);
+  //return CHSV(getHueBetween(hueLeft, hueRight, percent), 255, 255);
   return getColorBetween(colorLeft, colorRight, percent);
 }
 

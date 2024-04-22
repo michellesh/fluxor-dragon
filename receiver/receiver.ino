@@ -126,13 +126,16 @@ CRGB ledsEyes[NUM_LEDS_EYES];
 CRGB ledsSpine[NUM_LEDS_SPINE];
 
 byte boardNumber;
-float laserPixel = 0;
+int LASER_LENGTH = 30; // TODO
+float laserPixel = -LASER_LENGTH;
 float spineLaserPixel = NUM_LEDS_SPINE;
 float spinAngle = 0;
 bool spinReverse = false;
 uint8_t speed = DEFAULT_SPEED;
 CRGB colorLeft = DEFAULT_COLOR_LEFT;
 CRGB colorRight = DEFAULT_COLOR_RIGHT;
+uint8_t hueLeft = 0;
+uint8_t hueRight = 0;
 CRGB colorEye = DEFAULT_COLOR_EYE;
 uint8_t activeViz = DEFAULT_VIZ;
 bool strobeOn = false;
@@ -193,9 +196,11 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
   if (data.action == ACTION_SET_COLOR_LEFT) {
     CRGB color = knobValueToColor(data.value);
     colorLeft = color;
+    hueLeft = data.value;
   } else if (data.action == ACTION_SET_COLOR_RIGHT) {
     CRGB color = knobValueToColor(data.value);
     colorRight = color;
+    hueRight = data.value;
   } else if (data.action == ACTION_SET_COLOR_EYE) {
     CRGB color = knobValueToColor(data.value);
     colorEye = color;
@@ -348,6 +353,7 @@ void loop() {
     if (activeViz == VIZ_TWINKLE) {
       twinkle();
     } else if (activeViz == VIZ_LASERS) {
+      FastLED.clear();
       lasers();
       showBellyNoAnimation();
     } else if (activeViz == VIZ_WINDSHIELD) {
