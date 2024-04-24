@@ -56,7 +56,7 @@ void setAllColor(CRGB color) {
   // Belly
   for (int i = 0; i < NUM_STRIPS_BELLY; i++) {
     for (int j = 0; j < NUM_LEDS_BELLY[i]; j++) {
-      ledsBelly[i][j] = color;
+      ledsBelly[i][NUM_LEDS_BELLY[i] - j - 1] = color;
     }
   }
 
