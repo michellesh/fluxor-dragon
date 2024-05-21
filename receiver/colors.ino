@@ -44,12 +44,14 @@ void setAllColor(CRGB color) {
   // Wings
   for (int i = 0; i < NUM_STRIPS_WING; i++) {
     for (int j = 0; j < NUM_LEDS_WING[i]; j++) {
-      ledsLeft[i][j] = color;
+      //ledsLeft[i][j] = color;
+      setLeftWingLED(i, j, color);
     }
   }
   for (int i = 0; i < NUM_STRIPS_WING; i++) {
     for (int j = 0; j < NUM_LEDS_WING[i]; j++) {
-      ledsRight[i][j] = color;
+      //ledsRight[i][j] = color;
+      setRightWingLED(i, j, color);
     }
   }
 

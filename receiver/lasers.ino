@@ -34,9 +34,11 @@ void lasers() {
       if (abs(diff) < (LASER_LENGTH / 2) && p < NUM_LEDS_WING[strand]) {
         int b = diff < 0 ? laserFadeIn.scale(diff) : laserFadeOut.scale(diff);
         CRGB color = getGradientColorLeft(strand, pixel);
-        ledsLeft[strand][p] = color.nscale8(b);
+        //ledsLeft[strand][p] = color.nscale8(b);
+        setLeftWingLED(strand, p, color.nscale8(b));
         color = getGradientColorRight(strand, pixel);
-        ledsRight[strand][p] = color.nscale8(b);
+        //ledsRight[strand][p] = color.nscale8(b);
+        setRightWingLED(strand, p, color.nscale8(b));
       }
     }
   }

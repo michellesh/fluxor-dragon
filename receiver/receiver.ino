@@ -14,7 +14,8 @@
 #define BRIGHTNESS 255
 
 // RECEIVER BOARD 1
-#define PIN_EYES 15
+#define PIN_EYES 5 //15
+#define PIN_EYES_CLK 15
 #define PIN_SPINE 13
 #define PIN_LEFT_1 27
 #define PIN_LEFT_2 33
@@ -49,12 +50,12 @@
 #define MAX_LEDS_WING NUM_LEDS_WING_1
 #define MIN_LEDS_WING NUM_LEDS_WING_2
 
-#define NUM_LEDS_BELLY_1 80
-#define NUM_LEDS_BELLY_2 90
-#define NUM_LEDS_BELLY_3 100
-#define NUM_LEDS_BELLY_4 102
-#define NUM_LEDS_BELLY_5 90
-#define NUM_LEDS_BELLY_6 80
+#define NUM_LEDS_BELLY_1 80 // belly counts are guestimates
+#define NUM_LEDS_BELLY_2 110
+#define NUM_LEDS_BELLY_3 130
+#define NUM_LEDS_BELLY_4 122
+#define NUM_LEDS_BELLY_5 120
+#define NUM_LEDS_BELLY_6 120
 #define MAX_LEDS_BELLY NUM_LEDS_BELLY_1 // TODO
 #define MIN_LEDS_BELLY NUM_LEDS_BELLY_6 // TODO
 
@@ -296,9 +297,10 @@ void setup() {
         .setDither(BRIGHTNESS < 255);
 
     // Eyes and Spine
-    FastLED.addLeds<WS2813, PIN_EYES, GRB>(ledsEyes, NUM_LEDS_EYES)
-        .setCorrection(TypicalLEDStrip)
-        .setDither(BRIGHTNESS < 255);
+    FastLED.addLeds<WS2801, PIN_EYES, PIN_EYES_CLK, RGB>(ledsEyes, NUM_LEDS_EYES);
+    //FastLED.addLeds<WS2813, PIN_EYES, GRB>(ledsEyes, NUM_LEDS_EYES)
+    //    .setCorrection(TypicalLEDStrip)
+    //    .setDither(BRIGHTNESS < 255);
     FastLED.addLeds<WS2813, PIN_SPINE, GRB>(ledsSpine, NUM_LEDS_SPINE)
         .setCorrection(TypicalLEDStrip)
         .setDither(BRIGHTNESS < 255);
@@ -393,6 +395,24 @@ void showBellyNoAnimation() {
       CRGB color = getGradientColorBelly(i, j);
       ledsBelly[i][j] = color.nscale8(BRIGHTNESS / 2);
     }
+  }
+}
+
+void setLeftWingLED(int strand, int pixel, CRGB color) {
+  // LED strip data direction is opposite for first strand
+  if (strand == 0) {
+    ledsLeft[strand][NUM_LEDS_WING[strand] - pixel - 1] = color;
+  } else {
+    ledsLeft[strand][pixel] = color;
+  }
+}
+
+void setRightWingLED(int strand, int pixel, CRGB color) {
+  // LED strip data direction is opposite for first strand
+  if (strand == 0) {
+    ledsRight[strand][NUM_LEDS_WING[strand] - pixel - 1] = color;
+  } else {
+    ledsRight[strand][pixel] = color;
   }
 }
 

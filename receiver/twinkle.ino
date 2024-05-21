@@ -21,9 +21,11 @@ void twinkle() {
   for (uint8_t strand = 0; strand < NUM_STRIPS_WING; strand++) {
     for (uint8_t pixel = 0; pixel < NUM_LEDS_WING[strand]; pixel++) {
       CRGB color = getGradientColorLeft(strand, pixel);
-      ledsLeft[strand][pixel] = getTwinkleColor(PRNG16, clock32, color);
+      //ledsLeft[strand][pixel] = getTwinkleColor(PRNG16, clock32, color);
+      setLeftWingLED(strand, pixel, getTwinkleColor(PRNG16, clock32, color));
       color = getGradientColorRight(strand, pixel);
-      ledsRight[strand][pixel] = getTwinkleColor(PRNG16, clock32, color);
+      //ledsRight[strand][pixel] = getTwinkleColor(PRNG16, clock32, color);
+      setRightWingLED(strand, pixel, getTwinkleColor(PRNG16, clock32, color));
     }
   }
   for (int strand = 0; strand < NUM_STRIPS_BELLY; strand++) {

@@ -13,7 +13,7 @@
 #define KNOB_SPEED 33
 #define KNOB_COLOR_LEFT 34
 #define KNOB_COLOR_RIGHT 35
-#define KNOB_COLOR_EYE 32 // 0 -> 4095
+#define KNOB_COLOR_EYE 32  // 0 -> 4095
 
 // Button pins. Works: 23, 22, 2, 4
 #define BUTTON_FLASH 2
@@ -34,37 +34,37 @@ struct Knob {
   int prev;
 };
 
-int backgrounds[] = {VIZ_TWINKLE, VIZ_LASERS, VIZ_WINDSHIELD};
+int backgrounds[] = { VIZ_TWINKLE, VIZ_LASERS, VIZ_WINDSHIELD };
 unsigned long backgroundCycleTime = 1000 * 60 * 5;  // 5 minutes
 //unsigned long backgroundCycleTime = 1000 * 5 * 1;  // 5 seconds
 
 // Knob Actions
-msg colorEye = {ACTION_SET_COLOR_EYE};
-msg colorLeft = {ACTION_SET_COLOR_LEFT};
-msg colorRight = {ACTION_SET_COLOR_RIGHT};
-msg speed = {ACTION_SPEED};
+msg colorEye = { ACTION_SET_COLOR_EYE };
+msg colorLeft = { ACTION_SET_COLOR_LEFT };
+msg colorRight = { ACTION_SET_COLOR_RIGHT };
+msg speed = { ACTION_SPEED };
 msg data;
 
 // Button Actions
-msg background = {ACTION_SET_BACKGROUND, DEFAULT_VIZ};
-msg strobeOff = {ACTION_STROBE_OFF};
-msg strobeOn = {ACTION_STROBE_ON};
+msg background = { ACTION_SET_BACKGROUND, DEFAULT_VIZ };
+msg strobeOff = { ACTION_STROBE_OFF };
+msg strobeOn = { ACTION_STROBE_ON };
 
-Button buttonLasers = {BUTTON_LASERS, "LASERS", false};
-Button buttonTwinkle = {BUTTON_TWINKLE, "TWINKLE", false};
-Button buttonWindshield = {BUTTON_WINDSHIELD, "WINDSHIELD", false};
-Button buttonFlash = {BUTTON_FLASH, "FLASH", false};
+Button buttonLasers = { BUTTON_LASERS, "LASERS", false };
+Button buttonTwinkle = { BUTTON_TWINKLE, "TWINKLE", false };
+Button buttonWindshield = { BUTTON_WINDSHIELD, "WINDSHIELD", false };
+Button buttonFlash = { BUTTON_FLASH, "FLASH", false };
 
-Knob knobColorEye = {KNOB_COLOR_EYE, "COLOR EYE"};
-Knob knobColorLeft = {KNOB_COLOR_LEFT, "COLOR LEFT"};
-Knob knobColorRight = {KNOB_COLOR_RIGHT, "COLOR RIGHT"};
-Knob knobSpeed = {KNOB_SPEED, "SPEED"};
+Knob knobColorEye = { KNOB_COLOR_EYE, "COLOR EYE" };
+Knob knobColorLeft = { KNOB_COLOR_LEFT, "COLOR LEFT" };
+Knob knobColorRight = { KNOB_COLOR_RIGHT, "COLOR RIGHT" };
+Knob knobSpeed = { KNOB_SPEED, "SPEED" };
 
-Timer backgroundTimer = {backgroundCycleTime, 0};
+Timer backgroundTimer = { backgroundCycleTime, 0 };
 
 esp_now_peer_info_t peerInfo;
 
-void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
+void OnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len) {
   memcpy(&data, incomingData, sizeof(data));
 
   Serial.println("Sending all values");
@@ -93,13 +93,13 @@ void setup() {
   peerInfo.encrypt = false;
   // register first peer
   memcpy(peerInfo.peer_addr, receiverAddress1, 6);
-  if (esp_now_add_peer(&peerInfo) != ESP_OK){
+  if (esp_now_add_peer(&peerInfo) != ESP_OK) {
     Serial.println("Failed to add peer");
     return;
   }
   // register second peer
   memcpy(peerInfo.peer_addr, receiverAddress2, 6);
-  if (esp_now_add_peer(&peerInfo) != ESP_OK){
+  if (esp_now_add_peer(&peerInfo) != ESP_OK) {
     Serial.println("Failed to add peer");
     return;
   }
